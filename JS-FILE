@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+
+<HTML>
+ <head>
+   <title>StopWatch</title>
+ </head>
+ 
+ <body>
+ 
+   <style>
+     body {
+       background-color: cadetblue;
+       text-align: center;
+       font-size: 25px;
+     }
+     h1 {
+       font-size: 50px;
+     }
+     p {
+       color: blanchedalmond;
+       background-color: hotpink;
+       border: 2px solid white;
+       width: 300px;
+       margin: 15px auto;
+     }
+   </style>
+
+   <h1 id="h1">00:00:00</h1>
+   <button id="start" onclick="count()">Start</button>
+   <button id="pause" onclick="pause()">Pause</button>
+   <button id="clear" onclick="clearTimer()">Clear</button>
+   <button id="save" onclick="saveTime()">Save</button>
+   <button id="clear-preview" onclick="clearPreview()">Clear Preview</button>
+
+   <p id="wp" onclick="week()">Weekly Preview</p>
+   <p id="D1" onclick="check(1)">Press here for Day 1 Preview</p>
+   <p id="D2" onclick="check(2)">Press here for Day 2 Preview</p>
+   <p id="D3" onclick="check(3)">Press here for Day 3 Preview</p>
+   <p id="D4" onclick="check(4)">Press here for Day 4 Preview</p>
+   <p id="D5" onclick="check(5)">Press here for Day 5 Preview</p>
+   <p id="D6" onclick="check(6)">Press here for Day 6 Preview</p>
+   <p id="D7" onclick="check(7)">Press here for Day 7 Preview</p>
+
+   <script>
+     var h1 = document.getElementById("h1");
+     var seconds = 0, minutes = 0, hours = 0;
+     var t, i = 1;
+     var Result = {
+       "Day1": [0, 0, 0],
+       "Day2": [0, 0, 0],
+       "Day3": [0, 0, 0],
+       "Day4": [0, 0, 0],
+       "Day5": [0, 0, 0],
+       "Day6": [0, 0, 0],
+       "Day7": [0, 0, 0]
+     };
+
+     function count() {
+       t = setInterval(timer, 1000);
+     }
+
+     function timer() {
+       seconds++;
+       if (seconds >= 60) {
+         seconds = 0;
+         minutes++;
+         if (minutes >= 60) {
+           minutes = 0;
+           hours++;
+         }
+       }
+       h1.textContent = `${hours}:${minutes}:${seconds}`;
+     }
+
+     function pause() {
+       clearInterval(t);
+     }
+
+     function clearTimer() {
+       clearInterval(t);
+       seconds = 0;
+       minutes = 0;
+       hours = 0;
+       h1.textContent = "00:00:00";
+     }
+
+     function saveTime() {
+       if (i > 7) {
+         i = 1;
+       }
+       Result["Day" + i] = [hours, minutes, seconds];
+       i++;
+       clearTimer();
+     }
+
+     function clearPreview() {
+       clearTimer();
+       Result = {
+         "Day1": [0, 0, 0],
+         "Day2": [0, 0, 0],
+         "Day3": [0, 0, 0],
+         "Day4": [0, 0, 0],
+         "Day5": [0, 0, 0],
+         "Day6": [0, 0, 0],
+         "Day7": [0, 0, 0]
+       };
+     }
+
+     function week() {
+       document.getElementById("wp").textContent = JSON.stringify(Result);
+     }
+
+     function check(day) {
+       var dayId = "D" + day;
+       var previewText = `Day ${day} Preview: ${Result["Day" + day].join(':')}`;
+       document.getElementById(dayId).textContent = previewText;
+     }
+   </script>
+
+ </body>
+
+</HTML>
